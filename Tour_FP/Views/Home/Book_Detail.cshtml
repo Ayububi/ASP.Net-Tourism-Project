@@ -1,0 +1,31 @@
+﻿@model Tour_FP.Models.Domain.Admin_Dashboard
+@{
+    ViewData["Title"] = "Book_Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .header {
+        background-color: darkgray ;
+    }
+</style>
+<!-- Gallery -->
+<div class="row " style="margin-top:200px;">
+    <h1>@Model.CountryName</h1>
+    <div style="display:flex;">
+        <img style="width:50%;" src="/Uploads/@Model.Images"
+             class="w-100 shadow-1-strong rounded mb-4 "
+             alt="Boat on Calm Water" />
+             <div style="padding:10px; text-align:center; width:50%;" >
+             <p>@Model.Package_Title</p>
+            <p>@Model.Price</p>
+            </div>
+    </div>
+
+    
+
+
+</div>
+<!-- Gallery -->
+

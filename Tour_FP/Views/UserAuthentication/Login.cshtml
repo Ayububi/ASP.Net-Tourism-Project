@@ -1,0 +1,49 @@
+﻿@model Tour_FP.Models.DTO.LoginModel
+@{
+}
+@{
+    ViewData["Title"] = "Login";
+}
+<link rel="stylesheet" href="/css/form.css">
+<style>
+    .srouce {
+        text-align: center;
+        color: #ffffff;
+        padding: 10px;
+    }
+</style>
+<section class="hero" id="home">
+    <div class="main-container">
+        <div class="form-container">
+
+
+            <div class="form-body">
+                <h2 class="title" style="padding-bottom:30px;">Log in </h2>
+                <form  class="the-form" asp-action="Login" method="post">
+
+                    <label asp-for="Username" class="w-40">Username</label>
+                    <input type="text" class="input" asp-for="Username">
+                    <span asp-validation-for="Username"></span>
+
+                    <label asp-for="Password" class="w-40">Password</label>
+                    <input type="password" class="input" asp-for="Password">
+                    <span asp-validation-for="Password"></span>
+
+                    @if (TempData["msg"] != null)
+                    {
+                        <div class="alert mb-1">
+                            @TempData["msg"]
+                        </div>
+                    }
+
+                    <button class="btn btn-default" type="submit">Login</button>
+
+                </form>
+
+            </div><!-- FORM BODY-->
+
+            
+
+        </div><!-- FORM CONTAINER -->
+    </div>
+</section>

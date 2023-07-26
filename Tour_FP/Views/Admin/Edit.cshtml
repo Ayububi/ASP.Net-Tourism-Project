@@ -1,0 +1,83 @@
+﻿@model Tour_FP.Models.Domain.Admin_Dashboard
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form class="form"  method="post" enctype="multipart/form-data">
+    <div class="row p-2">
+        <h3>Edit Data</h3>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CountryName" class="form-label">Country/City</label>
+        <input asp-for="CountryName" class="form-control" />
+        <span asp-validation-for="CountryName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label">Location</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label">Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control " rows="5" style="resize:none;"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    @*//Packages Details*@
+
+    <h3>Packages Details</h3>
+    <div class="mb-3">
+        <label asp-for="Package_Title" class="form-label">Package_Title</label>
+        <input asp-for="Package_Title" class="form-control" />
+        <span asp-validation-for="Package_Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Price</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NumberOfDays" class="form-label">Days</label>
+        <input asp-for="NumberOfDays" class="form-control" />
+        <span asp-validation-for="NumberOfDays" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NumberOfPersons" class="form-label">Persons</label>
+        <input asp-for="NumberOfPersons" class="form-control" />
+        <span asp-validation-for="NumberOfPersons" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Details" class="form-label">Description</label>
+        <textarea asp-for="Details" class="form-control " rows="5" style="resize:none;"></textarea>
+        <span asp-validation-for="Details" class="text-danger"></span>
+    </div>
+
+
+
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert mb-1">
+            @TempData["msg"]
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary" >Update</button>
+</form>
+
+
+@*client side validation*@
+@section scripts {
+    @{
+        <partial name="_ValidationScriptsPartial.cshtml" />
+    }
+        }
+
+
+

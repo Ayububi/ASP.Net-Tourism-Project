@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Tour_FP.Models.Domain.Admin_Dashboard>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="row p-4" >
+    <div class="col-6 ">
+        <h2>DATA</h2>
+    </div>
+    <div class="col-6 text-end ">
+        <a class="btn btn-outline-primary" asp-action="Add" asp-controller="Admin">Add Data</a>
+    </div>
+    @if (TempData["msg"] != null)
+    {
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <div class="alert alert-success">
+            @TempData["msg"]
+        </div>
+
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(1000, 0).slideUp(1000, function () {
+                        $(this).remove();
+                    });
+                }, 2000);
+
+            });
+        </script>
+       
+    }
+</div>
+<table class="table table-hover border">
+
+    <thead class="sticky-top bg-dark text-light">
+        <tr>
+
+            <th>ID  </th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Image</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@item.CountryName</td>
+                <td>@item.Location</td>
+                <td>@item.Description</td>
+                <td>@item.Price</td>
+                <td><img style="width:auto; height:auto; max-height:200px; max-width:200px; " src="/Uploads/@item.Images" /></td>
+                <td class="flex-row"><a asp-action="Edit" asp-controller="Admin" asp-route-Id="@item.DestinationId"><ion-icon name="create-outline"></ion-icon></a>&ensp;<a asp-action="delete" asp-controller="Admin" asp-route-Id="@item.DestinationId"><ion-icon name="trash-outline"></ion-icon></a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
