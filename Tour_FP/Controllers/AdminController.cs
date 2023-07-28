@@ -9,11 +9,13 @@ namespace Tour_FP.Controllers
     [Authorize]
     public class AdminController : Controller
     {
+        private readonly DatabaseContext _Customercontext;
         private readonly IAdminService _adminService;
         private readonly IFileService _fileService;
 
-        public AdminController(IAdminService AdminService, IFileService fileService)
+        public AdminController(DatabaseContext Customercontext, IAdminService AdminService, IFileService fileService)
         {
+            _Customercontext = Customercontext;
             _adminService = AdminService;
             _fileService = fileService;
 
@@ -109,7 +111,12 @@ namespace Tour_FP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Booking_Details()
+        {
 
+            IEnumerable<CustomerDetail> data = _Customercontext.Customer;
+            return View(data);
+        }
 
     }
 }

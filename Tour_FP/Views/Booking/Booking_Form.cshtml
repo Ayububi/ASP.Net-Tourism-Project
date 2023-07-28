@@ -1,0 +1,66 @@
+﻿@model Tour_FP.Models.Domain.CustomerDetail
+@{
+    ViewData["Title"] = "Booking_Form";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Booking_Detail</h1>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="mb-4">Customer Details</h2>
+            <form asp-action="Booking_Form" method="post">
+                @* Add an anti-forgery token for security *@
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="FullName">Full Name:</label>
+                    <input type="text" class="form-control" id="FullName" name="FullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Email">Email Address:</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="PhoneNumber">Phone Number:</label>
+                    <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Address">Address:</label>
+                    <textarea class="form-control" id="Address" name="Address" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="NumberOfAdults">Number of Adults:</label>
+                    <input type="number" class="form-control" id="NumberOfAdults" name="NumberOfAdults" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="NumberOfChildren">Number of Children:</label>
+                    <input type="number" class="form-control" id="NumberOfChildren" name="NumberOfChildren" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="PreferredStartDate">Preferred Start Date:</label>
+                    <input type="date" class="form-control" id="PreferredStartDate" name="PreferredStartDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="PreferredEndDate">Preferred End Date:</label>
+                    <input type="date" class="form-control" id="PreferredEndDate" name="PreferredEndDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="SpecialRequests">Special Requests:</label>
+                    <textarea class="form-control" id="SpecialRequests" name="SpecialRequests"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Tour_FP.Models.Domain.CustomerDetail>
+@{
+    ViewData["Title"] = "Booking_Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Booking_Details</h1>
+
+<div class="row p-4">
+    <div class="col-6 ">
+        <h2>DATA</h2>
+    </div>
+    <div class="col-6 text-end ">
+        <a class="btn btn-outline-primary" asp-action="Add" asp-controller="Admin">Add Data</a>
+    </div>
+    @if (TempData["msg"] != null)
+    {
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <div class="alert alert-success">
+            @TempData["msg"]
+        </div>
+
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(1000, 0).slideUp(1000, function () {
+                        $(this).remove();
+                    });
+                }, 2000);
+
+            });
+        </script>
+
+    }
+</div>
+<table class="table table-hover border">
+
+    <thead class="sticky-top bg-dark text-light">
+        <tr>
+
+            <th>ID  </th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Image</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.Email</td>
+                
+                
+            </tr>
+        }
+    </tbody>
+</table>

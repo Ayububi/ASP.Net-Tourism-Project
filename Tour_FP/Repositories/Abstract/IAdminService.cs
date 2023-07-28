@@ -12,5 +12,6 @@ namespace Tour_FP.Repositories.Abstract
         Admin_Dashboard GetById(int id);
         bool Delete(int id);
         IQueryable<Admin_Dashboard> List();
+        
     }
 }

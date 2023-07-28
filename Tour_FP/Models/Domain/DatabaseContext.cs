@@ -11,7 +11,7 @@ namespace Tour_FP.Models.Domain
         {
         }
         public DbSet<Admin_Dashboard> Admin { get; set; }
-        
+        public DbSet<CustomerDetail> Customer { get; set; }
     }
 
 }
