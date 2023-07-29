@@ -6,7 +6,7 @@ using Tour_FP.Repositories.Abstract;
 
 namespace Tour_FP.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly DatabaseContext _Customercontext;

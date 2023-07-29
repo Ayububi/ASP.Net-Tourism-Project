@@ -67,5 +67,25 @@ namespace Tour_FP.Repositories.Implementation
                 return false;
             }
         }
+
+       
+
+        public bool UpdateStatus(CustomerDetail customer, string status)
+        {
+            try
+            {
+                
+                    customer.Status = status;
+                    ctx.SaveChanges();
+                    return true;
+               
+                
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception or log it, if needed
+                return false;
+            }
+        }
     }
 }

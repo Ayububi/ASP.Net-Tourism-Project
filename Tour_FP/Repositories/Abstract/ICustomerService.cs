@@ -12,6 +12,8 @@ namespace Tour_FP.Repositories.Abstract
         CustomerDetail GetById(int id);
         bool Delete(int id);
         IQueryable<CustomerDetail> List();
-        
+
+        bool UpdateStatus(CustomerDetail customer, string status);
+
     }
 }

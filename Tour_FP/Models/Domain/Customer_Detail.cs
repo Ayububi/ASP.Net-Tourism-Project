@@ -35,6 +35,7 @@ namespace Tour_FP.Models.Domain
 
 		public string? SpecialRequests { get; set; }
 
-		// Additional fields can be added as needed, such as emergency contact details.
-	}
+        public string? Status { get; set; }
+        
+    }
 }

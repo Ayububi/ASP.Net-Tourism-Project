@@ -22,7 +22,7 @@ namespace Tour_FP.Controllers
             {
                 Email = "admin@gmail.com",
                 Username = "admin",
-                Name = "Ravindra",
+                Name = "Ayub",
                 Password = "Admin@123",
                 PasswordConfirm = "Admin@123",
                 Role = "Admin"
@@ -34,29 +34,65 @@ namespace Tour_FP.Controllers
 
         public async Task<IActionResult> Login()
         {
+            string returnUrl = Request.Query["ReturnUrl"];
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            
+                
 
             var result = await authService.LoginAsync(model);
             if (result.StatusCode == 1)
-                return RedirectToAction("Index", "Home");
+            {
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return LocalRedirect(returnUrl); // Redirect to the original page after login if it's a local URL
+                else
+                    return RedirectToAction("Index", "Home"); // Redirect to the home page if returnUrl is not provided or is not a local URL
+            }
             else
             {
-                TempData["msg"] = "Could not logged in..";
+                TempData["msg"] = "Could not log in..";
                 return RedirectToAction(nameof(Login));
             }
         }
+
         public async Task<IActionResult> Logout()
         {
             await authService.LogoutAsync();
             return RedirectToAction(nameof(Login));
         }
 
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignUp(RegistrationModel model)
+        {
+            model.Role = "User"; // Set the role to "User" for sign-up
+            
+
+
+                var result = await authService.RegisterAsync(model);
+                if (result.StatusCode == 1)
+                {
+                    TempData["msg"] = "Registration successful. You can now log in with your credentials.";
+                    return RedirectToAction(nameof(Login));
+                }
+                else
+                {
+                    TempData["msg"] = "Could not register user.";
+                    return View(model);
+                }
+            
+           
+                
+
+        }
     }
 }

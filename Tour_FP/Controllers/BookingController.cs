@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Stripe.Checkout;
+using System.Text;
 using Tour_FP.Models.Domain;
 using Tour_FP.Repositories.Abstract;
 
 namespace Tour_FP.Controllers
 {
-   
+    [Authorize(Roles = "User")]
     public class BookingController : Controller
     {
         private readonly ICustomerService _customerService;
@@ -32,21 +34,36 @@ namespace Tour_FP.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var Data = _customerService.Add(model);
-            if (Data)
-            {
-                TempData["msg"] = "Added Successfully";
-                return RedirectToAction(nameof(CheckOut));
-            }
-            else
-            {
-                TempData["msg"] = "Error on server side";
-                return View(model);
-            }
+            model.Status = "Pending";
+            HttpContext.Session.Set("PendingBooking", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(model)));
 
+            return RedirectToAction(nameof(CheckOut));
 
 
         }
+        public IActionResult PaymentSuccess(string sessionId)
+        {
+            // Retrieve the booking data from the session
+            byte[] bookingData;
+            if (HttpContext.Session.TryGetValue("PendingBooking", out bookingData))
+            {
+                var booking = JsonConvert.DeserializeObject<CustomerDetail>(Encoding.UTF8.GetString(bookingData));
+
+                // Update the booking status to "paid" in the database using the UpdateStatus method
+                _customerService.UpdateStatus(booking, "paid");
+
+                // Save the booking data to the database using the Add method
+                _customerService.Add(booking);
+
+                // Remove the booking data from the session after it has been processed
+                HttpContext.Session.Remove("PendingBooking");
+            }
+
+            return RedirectToAction("Index","Home");
+        }
+
+
+
 
         public IActionResult CheckOut()
         {
@@ -65,8 +82,8 @@ namespace Tour_FP.Controllers
             var domain = "https://localhost:7044/";
             var option = new SessionCreateOptions 
             {
-                SuccessUrl=domain+$"CheckOut/OrderConfirmation",
-                CancelUrl=domain+ "CheckOut/Login" ,
+                SuccessUrl = domain + "Booking/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
+                CancelUrl =domain+ "CheckOut/Login" ,
                 LineItems=new List<SessionLineItemOptions>(),
                 Mode="payment",
                 CustomerEmail="ayububi1234@gmial.com",

@@ -1,0 +1,76 @@
+﻿@model Tour_FP.Models.DTO.RegistrationModel
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link rel="stylesheet" href="/css/form.css">
+<style>
+    
+.hero {
+    min-height: 1030px;
+    padding-top: 85px;
+}
+    .srouce {
+        text-align: center;
+        color: #ffffff;
+        padding: 10px;
+    }
+</style>
+<section class="hero" id="home">
+    <div class="main-container">
+        <div class="form-container">
+
+
+            <div class="form-body">
+                <h2 class="title" style="padding-bottom:30px;">Sign Up </h2>
+                <form class="the-form" asp-action="SignUp" method="post">
+
+                    <label asp-for="Name" class="w-40">Name</label>
+                    <input type="text" class="input" asp-for="Name">
+                    <span asp-validation-for="Name"></span>
+
+                    <label asp-for="Email" class="w-40">Email</label>
+                    <input type="text" class="input" asp-for="Email">
+                    <span asp-validation-for="Email"></span>
+
+                    <label asp-for="Username" class="w-40">Username</label>
+                    <input type="text" class="input" asp-for="Username">
+                    <span asp-validation-for="Username"></span>
+
+                    <label asp-for="Password" class="w-40">Password</label>
+                    <input type="password" class="input" asp-for="Password" name="Password">
+                    <span asp-validation-for="Password"></span>
+
+                    <label asp-for="PasswordConfirm" class="w-40">PasswordConfirm</label>
+                    <input type="password" class="input" asp-for="PasswordConfirm" name="PasswordConfirm">
+                    <span asp-validation-for="PasswordConfirm"></span>
+
+                    @if (TempData["msg"] != null)
+                    {
+                        <div class="alert mb-1">
+                            @TempData["msg"]
+                        </div>
+                    }
+
+                    
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </form>
+                <br />
+                <a asp-action="Login" asp-controller="UserAuthentication">Back to Login</a>
+            </div><!-- FORM BODY-->
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+

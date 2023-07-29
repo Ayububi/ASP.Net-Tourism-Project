@@ -4,6 +4,7 @@ using Stripe;
 using Tour_FP.Models.Domain;
 using Tour_FP.Repositories.Abstract;
 using Tour_FP.Repositories.Implementation;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
 
-//builder.Services.ConfigureApplicationCookie(options=>options.LoginPath = "/UserAutentication/Login");
+builder.Services.AddDistributedMemoryCache(); // Required for session storage
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout as needed.
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
+
+builder.Services.ConfigureApplicationCookie(options=>options.LoginPath = "/UserAuthentication/Login");
 
 var app = builder.Build();
 
@@ -42,7 +53,7 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
