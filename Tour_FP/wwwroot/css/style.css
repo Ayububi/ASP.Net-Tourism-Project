@@ -132,8 +132,11 @@ body { background: var(--white); }
 \*-----------------------------------*/
 
 .container { padding-inline: 15px; }
-
+p{
+    margin-bottom:0px;
+}
 .btn {
+    display:block;
   color: var(--white);
   text-transform: uppercase;
   font-size: var(--fs-5);
@@ -160,7 +163,7 @@ body { background: var(--white); }
 .h1,
 .h2,
 .h3 {
-  font-weight: var(--fw-800);
+  font-weight: var(--fw-600);
   font-family: var(--ff-montserrat);
   text-transform: uppercase;
 }
@@ -225,6 +228,7 @@ body { background: var(--white); }
     transition: var(--transition);
     border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
     padding-block: 15px;
+    padding-bottom:0px;
     z-index: 1;
 }
 .header.active .header-top {
@@ -909,7 +913,7 @@ address {
    */
 
   .hero {
-    min-height: 700px;
+    min-height: 600px;
     padding-top: 85px;
   }
 

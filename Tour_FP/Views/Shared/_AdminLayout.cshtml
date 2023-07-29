@@ -130,25 +130,29 @@
                     </ul>
 
                 </nav>
-                @if (string.IsNullOrEmpty(username))
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-primary" asp-action="Login" asp-controller="UserAuthentication">Login</a>
-                }
-                @if (!string.IsNullOrEmpty(username))
-                {
-
-                    <div class="navbar">
-                     
-                        <div class="dropdown">
-                            <a class=" btn btn-primary">Admin<i class=" fa fa-caret-down dropbtn" style="margin-left: 5px;" onclick="myFunction()"></i></a>
-                            <div class="dropdown-content" id="myDropdown">
-                                <a asp-action="Index" asp-controller="Admin">Dashboard</a>
-                                <a asp-action="Logout" asp-controller="UserAuthentication">Logout</a>
+                    var isAdmin = User.IsInRole("Admin");
+                    if (isAdmin)
+                    {
+                        <div class="navbar">
+                            <div class="dropdown">
+                                <a class="btn btn-primary">Admin<i class="fa fa-caret-down dropbtn" style="margin-left: 5px;" onclick="myFunction()"></i></a>
+                                <div class="dropdown-content" id="myDropdown">
+                                    <a asp-action="Index" asp-controller="Admin">Dashboard</a>
+                                    <a asp-action="Logout" asp-controller="UserAuthentication">Logout</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="Login" asp-controller="UserAuthentication">Login</a>
+                    }
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-action="Login" asp-controller="UserAuthentication">Login</a>
                 }
 
 

@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TourHub - Travel Agency</title>
     <link rel="icon" type="image/x-icon" href="/lib/favicon.svg">
-   @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     
-    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
+    
     
     
 
@@ -20,6 +20,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
 </head>
 <body>
     <header class="header" data-header>
@@ -130,26 +132,31 @@
                     </ul>
 
                 </nav>
-                @if (string.IsNullOrEmpty(username))
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var isAdmin = User.IsInRole("Admin");
+                    if (isAdmin)
+                    {
+                        <div class="navbar">
+                            <div class="dropdown">
+                                <a class="btn btn-primary">Admin<i class="fa fa-caret-down dropbtn" style="margin-left: 5px;" onclick="myFunction()"></i></a>
+                                <div class="dropdown-content" id="myDropdown">
+                                    <a asp-action="Index" asp-controller="Admin">Dashboard</a>
+                                    <a asp-action="Logout" asp-controller="UserAuthentication">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="Login" asp-controller="UserAuthentication">Login</a>
+                    }
+                }
+                else
                 {
                     <a class="btn btn-primary" asp-action="Login" asp-controller="UserAuthentication">Login</a>
                 }
-                @if (!string.IsNullOrEmpty(username))
-                {
 
-                    <div class="navbar">
-                     
-                        <div class="dropdown">
-                            <a class=" btn btn-primary">Admin<i class=" fa fa-caret-down dropbtn" style="margin-left: 5px;" onclick="myFunction()"></i></a>
-                            <div class="dropdown-content" id="myDropdown">
-                                <a asp-action="Index" asp-controller="Admin">Dashboard</a>
-                                <a asp-action="Logout" asp-controller="UserAuthentication">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                }
 
 
             </div>
