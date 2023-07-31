@@ -1,10 +1,12 @@
-﻿using Tour_FP.Models.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using Tour_FP.Models.Domain;
 
 namespace Tour_FP.Models.Domain
 {
+    [Keyless]
     public class CustomerDashboardViewModel
     {
-        public CustomerDetail? CustomerInfo { get; set; }
-        public Admin_Dashboard? DestinationInfo { get; set; }
+        public List<CustomerDetail>? CustomerInfo { get; set; }
+        public List<Admin_Dashboard>? DestinationInfo { get; set; }
     }
 }

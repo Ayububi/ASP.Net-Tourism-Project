@@ -1,31 +1,52 @@
-﻿@model List<Tour_FP.Models.Domain.CustomerDashboardViewModel>
+﻿@model Tour_FP.Models.Domain.CustomerDashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_udashboardLayout.cshtml";
 }
 
-<h1>Dashboard</h1>
-@if (Model != null && Model.Count > 0)
-{
-    @foreach (var bookingViewModel in Model)
-    {
-        <h2>Booking Details</h2>
-        <p>Customer Name: @bookingViewModel.CustomerInfo.FullName</p>
-        <p>Email: @bookingViewModel.CustomerInfo.Email</p>
-        <!-- Add other customer booking details properties as needed -->
-        <h2>Destination Information</h2>
-        @if (bookingViewModel.DestinationInfo != null)
-        {
-            
-            <p>Destination Title: @bookingViewModel.DestinationInfo.Package_Title</p>
-            <p>Price: @bookingViewModel.DestinationInfo.Price</p>
-            <p>Location: @bookingViewModel.DestinationInfo.Location</p>
-            <!-- Add other destination details properties as needed -->
-        }
-        else
-        {
-            <p>No destination information available for this booking.</p>
-        }
-    }
-}
+<div class="container mt-4">
+    <h2>User Dashboard</h2>
 
+    @if (Model.CustomerInfo.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Destination ID</th>
+                        <th>Destination Name</th>
+                        <th>Location</th>
+                        <th>Number of Adults</th>
+                        <th>Number of Children</th>
+                        <th>Preferred Start Date</th>
+                        <th>Preferred End Date</th>
+                        <th>Special Requests</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customerInfo in Model.CustomerInfo)
+                    {
+                        var destinationInfo = Model.DestinationInfo.FirstOrDefault(di => di.DestinationId == customerInfo.DestinationId);
+                        if (destinationInfo != null)
+                        {
+                            <tr>
+                                <td>@customerInfo.DestinationId</td>
+                                <td>@destinationInfo.CountryName</td>
+                                <td>@destinationInfo.Location</td>
+                                <td>@customerInfo.NumberOfAdults</td>
+                                <td>@customerInfo.NumberOfChildren</td>
+                                <td>@customerInfo.PreferredStartDate.ToShortDateString()</td>
+                                <td>@customerInfo.PreferredEndDate.ToShortDateString()</td>
+                                <td>@customerInfo.SpecialRequests</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No destinations selected.</p>
+    }
+</div>

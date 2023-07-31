@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Tour_FP.Models.Domain;
 using Tour_FP.Repositories.Abstract;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace Tour_FP.Controllers
 {
@@ -27,35 +29,30 @@ namespace Tour_FP.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
+            // Get the current logged-in user
             var user = await _userManager.GetUserAsync(User);
 
-            // Retrieve all bookings for the customer
-            var customerBookings = _dbContext.Customer
-                .Include(c => c.Admin_Dashboard)
-                .Where(c => c.UserId == user.Id)
+            // Retrieve the CustomerDetail records for the logged-in user
+            var userCustomerDetails = _dbContext.Customer
+                .Where(cd => cd.UserId == user.Id)
                 .ToList();
 
-            // If the user has made bookings, create the ViewModel
-            if (customerBookings.Count > 0)
+            // Get the DestinationIds associated with the logged-in user
+            var destinationIds = userCustomerDetails.Select(cd => cd.DestinationId).ToList();
+
+            // Retrieve the Admin_Dashboard records for the DestinationIds
+            var adminDashboardsForUserDestinations = _dbContext.Admin
+                .Where(ad => destinationIds.Contains(ad.DestinationId))
+                .ToList();
+
+            // Create the view model by combining CustomerDetail and Admin_Dashboard data
+            var viewModel = new CustomerDashboardViewModel
             {
-                var viewModel = new List<CustomerDashboardViewModel>();
+                CustomerInfo = userCustomerDetails,
+                DestinationInfo = adminDashboardsForUserDestinations
+            };
 
-                foreach (var customerBooking in customerBookings)
-                {
-                    var bookingViewModel = new CustomerDashboardViewModel
-                    {
-                        CustomerInfo = customerBooking,
-                        DestinationInfo = customerBooking.Admin_Dashboard
-                    };
-
-                    viewModel.Add(bookingViewModel);
-                }
-
-                return View(viewModel);
-            }
-
-            // Handle the case where the user has not made any bookings yet
-            return View();
+            return View(viewModel);
         }
 
 
