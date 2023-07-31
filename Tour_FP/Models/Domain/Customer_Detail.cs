@@ -36,6 +36,11 @@ namespace Tour_FP.Models.Domain
 		public string? SpecialRequests { get; set; }
 
         public string? Status { get; set; }
-        
+
+		
+        public string? UserId { get; set; } // Add this property to store the user's ID
+
+        public int DestinationId { get; set; }
+        public Admin_Dashboard? Admin_Dashboard { get; set; }
     }
 }

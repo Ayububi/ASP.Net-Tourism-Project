@@ -39,7 +39,7 @@
 </div>
 <table class="table table-hover border">
 
-    <thead class="sticky-top bg-dark text-light">
+    <thead class=" bg-dark text-light">
         <tr>
 
             <th>ID  </th>
@@ -54,12 +54,15 @@
     <tbody>
         @foreach (var item in Model)
         {
-
             <tr>
+                <td>@item.CustomerId</td>
                 <td>@item.FullName</td>
-                <td>@item.Email</td>
-                
-                
+                <td>@(item.Admin_Dashboard != null ? item.Admin_Dashboard.Package_Title : "Not Available")</td>
+                <td>@(item.Admin_Dashboard != null ? item.Admin_Dashboard.Price.ToString() : "Not Available")</td>
+                <td>@(item.Admin_Dashboard != null ? item.Admin_Dashboard.Location : "Not Available")</td>
+                <td>
+                    <!-- Add actions/buttons as needed -->
+                </td>
             </tr>
         }
     </tbody>

@@ -1,0 +1,31 @@
+﻿@model List<Tour_FP.Models.Domain.CustomerDashboardViewModel>
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_udashboardLayout.cshtml";
+}
+
+<h1>Dashboard</h1>
+@if (Model != null && Model.Count > 0)
+{
+    @foreach (var bookingViewModel in Model)
+    {
+        <h2>Booking Details</h2>
+        <p>Customer Name: @bookingViewModel.CustomerInfo.FullName</p>
+        <p>Email: @bookingViewModel.CustomerInfo.Email</p>
+        <!-- Add other customer booking details properties as needed -->
+        <h2>Destination Information</h2>
+        @if (bookingViewModel.DestinationInfo != null)
+        {
+            
+            <p>Destination Title: @bookingViewModel.DestinationInfo.Package_Title</p>
+            <p>Price: @bookingViewModel.DestinationInfo.Price</p>
+            <p>Location: @bookingViewModel.DestinationInfo.Location</p>
+            <!-- Add other destination details properties as needed -->
+        }
+        else
+        {
+            <p>No destination information available for this booking.</p>
+        }
+    }
+}
+

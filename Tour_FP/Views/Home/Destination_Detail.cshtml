@@ -25,7 +25,9 @@
             <p>@Model.NumberOfPersons</p>
             <p>@Model.NumberOfDays</p>
             <p>@Model.Location</p>
-            <a asp-action="Booking_Form"  asp-controller="Booking" class="btn btn-primary"> Book Now</a>
+            <!-- Link to the booking form with the destinationId as a parameter -->
+            <a href="@Url.Action("Booking_Form", "Booking", new { destinationId = Model.DestinationId })" class="btn btn-primary">Book Now</a>
+           
             </div>
     </div>
 

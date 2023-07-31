@@ -20,7 +20,7 @@ namespace Tour_FP.Repositories.Implementation
                 ctx.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -37,18 +37,18 @@ namespace Tour_FP.Repositories.Implementation
                 ctx.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-      public  CustomerDetail GetById(int id)
+        public CustomerDetail GetById(int id)
         {
             return ctx.Customer.Find(id);
         }
 
-       public IQueryable<CustomerDetail> List()
+        public IQueryable<CustomerDetail> List()
         {
             var data = ctx.Customer.AsQueryable();
             return data;
@@ -62,7 +62,7 @@ namespace Tour_FP.Repositories.Implementation
                 ctx.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -81,7 +81,7 @@ namespace Tour_FP.Repositories.Implementation
                
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle the exception or log it, if needed
                 return false;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tour_FP.Models.Domain;
 
@@ -11,9 +12,11 @@ using Tour_FP.Models.Domain;
 namespace Tour_FP.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230730064603_mig13")]
+    partial class mig13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,12 +282,6 @@ namespace Tour_FP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Admin_DashboardDestinationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DestinationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -319,8 +316,6 @@ namespace Tour_FP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerId");
-
-                    b.HasIndex("Admin_DashboardDestinationId");
 
                     b.ToTable("Customer");
                 });
@@ -374,15 +369,6 @@ namespace Tour_FP.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Tour_FP.Models.Domain.CustomerDetail", b =>
-                {
-                    b.HasOne("Tour_FP.Models.Domain.Admin_Dashboard", "Admin_Dashboard")
-                        .WithMany()
-                        .HasForeignKey("Admin_DashboardDestinationId");
-
-                    b.Navigation("Admin_Dashboard");
                 });
 #pragma warning restore 612, 618
         }

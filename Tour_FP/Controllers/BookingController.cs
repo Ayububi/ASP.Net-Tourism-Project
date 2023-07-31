@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Stripe.Checkout;
+using System.Security.Claims;
 using System.Text;
 using Tour_FP.Models.Domain;
 using Tour_FP.Repositories.Abstract;
+using Tour_FP.Repositories.Implementation;
 
 namespace Tour_FP.Controllers
 {
@@ -13,31 +16,51 @@ namespace Tour_FP.Controllers
     public class BookingController : Controller
     {
         private readonly ICustomerService _customerService;
-       
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAdminService _adminService;
 
-        public BookingController(ICustomerService CustomerService)
+        public BookingController(ICustomerService CustomerService, UserManager<ApplicationUser> userManager,IAdminService adminService)
         {
             _customerService = CustomerService;
-          
+            _adminService = adminService;
+            _userManager = userManager;
+
 
         }
 
-        public IActionResult Booking_Form()
+        public IActionResult Booking_Form(int destinationId)
         {
-
+            ViewData["DestinationId"] = destinationId;
             return View();
         }
         [HttpPost]
-        public IActionResult Booking_Form(CustomerDetail model)
+        public async Task<IActionResult> Booking_FormAsync(CustomerDetail model)
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Ensure the user is not null before accessing the Id property
+            if (user != null)
+            {
+                model.UserId = user.Id; // Assuming UserId is of type string
+            }
+            model.Status = "Pending";
 
             if (!ModelState.IsValid)
+            {
+                // Output ModelState errors to the console
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+
                 return View(model);
+            }
 
-            model.Status = "Pending";
             HttpContext.Session.Set("PendingBooking", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(model)));
-
-            return RedirectToAction(nameof(CheckOut));
+            return RedirectToAction(nameof(CheckOut), new { destinationId = model.DestinationId });
 
 
         }
@@ -65,54 +88,49 @@ namespace Tour_FP.Controllers
 
 
 
-        public IActionResult CheckOut()
+        public IActionResult CheckOut(int destinationId)
         {
-            List<Admin_Dashboard> productlist = new List<Admin_Dashboard>();
+            var destination = _adminService.GetById(destinationId);
 
-            productlist = new List<Admin_Dashboard>
+            // Ensure the destination is not null
+            if (destination == null)
             {
-                new Admin_Dashboard
-                {
-                    CountryName="london",
-                    Location="Gold",
-                    Price=360,
-               
-                },
-            };
+                return NotFound();
+            }
+
             var domain = "https://localhost:7044/";
-            var option = new SessionCreateOptions 
+            var option = new SessionCreateOptions
             {
                 SuccessUrl = domain + "Booking/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
-                CancelUrl =domain+ "CheckOut/Login" ,
-                LineItems=new List<SessionLineItemOptions>(),
-                Mode="payment",
-                CustomerEmail="ayububi1234@gmial.com",
-            };
-            foreach(var item in productlist)
+                CancelUrl = domain + "CheckOut/Login",
+                LineItems = new List<SessionLineItemOptions>
+        {
+            new SessionLineItemOptions
             {
-                var SessionListItem = new SessionLineItemOptions
+                PriceData = new SessionLineItemPriceDataOptions
                 {
-                    PriceData = new SessionLineItemPriceDataOptions
+                    UnitAmount = destination.Price*100,
+                    Currency = "pkr",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
-                        UnitAmount = item.Price*100 ,
-                        Currency = "usd",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = item.CountryName.ToString(),
-                        }
-                    },
-
-                    Quantity=item.Price
-                };
-                option.LineItems.Add(SessionListItem);
-
+                        Name = destination.CountryName,
+                    }
+                },
+                Quantity = 1,
             }
+        },
+                Mode = "payment",
+                PaymentMethodTypes = new List<string> { "card" },
+                CustomerEmail = "ayububi1234@gmial.com",
+            };
+
             var services = new SessionService();
             Session session = services.Create(option);
             Response.Headers.Add("location", session.Url);
 
             return new StatusCodeResult(303);
         }
+
 
 
 

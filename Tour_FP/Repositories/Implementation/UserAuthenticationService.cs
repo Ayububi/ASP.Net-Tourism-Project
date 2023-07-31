@@ -58,6 +58,7 @@ namespace Tour_FP.Repositories.Implementation
 
             status.StatusCode = 1;
             status.Message = "You have registered successfully";
+
             return status;
         }
 
