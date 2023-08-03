@@ -6,6 +6,7 @@ using Tour_FP.Repositories.Abstract;
 
 namespace Tour_FP.Controllers
 {
+//Admin can only access these functions
     [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
