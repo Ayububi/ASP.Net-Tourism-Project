@@ -1,39 +1,158 @@
-﻿@model Tour_FP.Models.Domain.Admin_Dashboard
+﻿@model Tour_FP.Models.Domain.DestinationWithReviewsViewModel
 @{
     ViewData["Title"] = "Book_Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-<style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+   
+
+    <style >
     .header {
-        background-color: darkgray ;
+        background-color: darkgray;
     }
+    /* Custom CSS for the reviews section */
+    .reviews-section {
+        margin-top: 20px;
+    }
+
+    .review-date{
+        text-align:end;
+    }
+    .review-item {
+        border-bottom: 1px solid #ccc;
+        padding: 20px 0;
+    }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+    .card-rating {
+        color: #ffc107; /* Yellow color for stars */
+        font-size: 24px;
+    }
+
+    .review-text {
+        margin-top: 10px;
+    }
+
+    .custom-mt-200 {
+        margin-top: 200px;
+    }
+
 </style>
-<!-- Gallery -->
-<div class="row " style="margin-top:200px;">
-    <h1>@Model.CountryName</h1>
-    <div style="display:flex;">
-        <img style="width:50%;" src="/Uploads/@Model.Images"
-             class=" shadow-1-strong rounded mb-4 "
-             alt="Boat on Calm Water" />
-             <div style="padding:10px; text-align:center; width:50%;" >
-             <p>@Model.Package_Title</p>
-            <p>@Model.Price</p>
-            <p>@Model.Description</p>
-            <p>@Model.Details</p>
-            <p>@Model.NumberOfPersons</p>
-            <p>@Model.NumberOfDays</p>
-            <p>@Model.Location</p>
-            <!-- Link to the booking form with the destinationId as a parameter -->
-            <a href="@Url.Action("Booking_Form", "Booking", new { destinationId = Model.DestinationId })" class="btn btn-primary">Book Now</a>
-           
+<div class="container-fluid custom-mt-200">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="/Uploads/@Model.Destination.Images" class="img-fluid rounded mb-4 h-100" alt="Destination Image" />
+            
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+            
+                <div class="card-body no-gutters">
+                    <h1 class="card-title">@Model.Destination.CountryName</h1>
+                    <p class="card-subtitle lead">@Model.Destination.Package_Title</p>
+                    <p class="card-text">@Model.Destination.Description</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="fa fa-money"></i> Price: @Model.Destination.Price</li>
+                        <li class="list-group-item"><i class="fa fa-user"></i> Number of Persons: @Model.Destination.NumberOfPersons</li>
+                        <li class="list-group-item"><i class="fa fa-calendar"></i> Number of Days: @Model.Destination.NumberOfDays</li>
+                        <li class="list-group-item"><i class="fa fa-map-marker"></i> Location: @Model.Destination.Location</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="@Url.Action("Booking_Form", "Booking", new { destinationId = Model.Destination.DestinationId })" class="btn btn-primary btn-block">Book Now</a>
+                </div>
             </div>
+        </div>
+
+
+
+
     </div>
-
-    
-    
-
 </div>
-<!-- Gallery -->
+<div class="container mt-5">
+    <h3 class="mb-3">Weather Information</h3>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">@Model.WeatherInfo</p>
+        </div>
+    </div>
+</div>
 
+
+<div class="container mt-5">
+    <h2 class="mb-4">Reviews and Ratings</h2>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="card-rating">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    @if (i < review.Rating)
+                                    {
+                                        <ion-icon name="star"></ion-icon>
+                                    }
+                                    else
+                                    {
+                                        <ion-icon name="star-outline"></ion-icon>
+                                    }
+                                }
+                            </div>
+                            <p class="mb-0">@review.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <p class="mt-2">@review.ReviewText</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Map -->
+
+<div class="container mt-5">
+    <h2>Map</h2>
+    <div id="map" style="width: 100%; height: 400px; z-index: 0;"></div>
+</div>
+
+@section Scripts {
+    <script>
+        var map = L.map('map').setView([0, 0], 2); // Default center and zoom
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Use Leaflet to set the marker position
+        var marker = L.marker([0, 0]).addTo(map); // Default position
+
+        // Fetch latitude and longitude using Nominatim API
+        var city = "@Model.Destination.Location"; // Replace with your desired city
+        var apiUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(city);
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    var location = data[0];
+                    var lat = parseFloat(location.lat);
+                    var lon = parseFloat(location.lon);
+                    marker.setLatLng([lat, lon]).bindPopup(city).openPopup();
+                    map.setView([lat, lon], 12); // Set the map's center and zoom
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data from Nominatim API:', error);
+            });
+    </script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+}

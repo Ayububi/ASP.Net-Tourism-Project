@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tour_FP.Models.Domain;
 
@@ -11,9 +12,11 @@ using Tour_FP.Models.Domain;
 namespace Tour_FP.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230807003642_mig20")]
+    partial class mig20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,69 +270,6 @@ namespace Tour_FP.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Tour_FP.Models.Domain.CommentTable", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("commentTable");
-                });
-
-            modelBuilder.Entity("Tour_FP.Models.Domain.CommunityPostTable", b =>
-                {
-                    b.Property<int>("PostId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostId"));
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Images")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PostId");
-
-                    b.ToTable("PostTable");
-                });
-
             modelBuilder.Entity("Tour_FP.Models.Domain.CustomerDashboardViewModel", b =>
                 {
                     b.ToTable("CustomerDashboard");
@@ -421,9 +361,6 @@ namespace Tour_FP.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ReviewId");
 
                     b.HasIndex("Admin_DashboardDestinationId");
@@ -482,17 +419,6 @@ namespace Tour_FP.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tour_FP.Models.Domain.CommentTable", b =>
-                {
-                    b.HasOne("Tour_FP.Models.Domain.CommunityPostTable", "CommunityPost")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommunityPost");
-                });
-
             modelBuilder.Entity("Tour_FP.Models.Domain.CustomerDetail", b =>
                 {
                     b.HasOne("Tour_FP.Models.Domain.Admin_Dashboard", "Admin_Dashboard")
@@ -509,11 +435,6 @@ namespace Tour_FP.Migrations
                         .HasForeignKey("Admin_DashboardDestinationId");
 
                     b.Navigation("Admin_Dashboard");
-                });
-
-            modelBuilder.Entity("Tour_FP.Models.Domain.CommunityPostTable", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

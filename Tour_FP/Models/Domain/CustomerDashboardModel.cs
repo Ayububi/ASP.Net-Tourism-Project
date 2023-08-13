@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Tour_FP.Models.Domain;
 
 namespace Tour_FP.Models.Domain
@@ -8,5 +9,7 @@ namespace Tour_FP.Models.Domain
     {
         public List<CustomerDetail>? CustomerInfo { get; set; }
         public List<Admin_Dashboard>? DestinationInfo { get; set; }
+
+       
     }
 }

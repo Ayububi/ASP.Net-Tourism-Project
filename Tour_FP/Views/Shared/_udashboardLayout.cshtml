@@ -104,15 +104,15 @@
                     <ul class="navbar-list">
 
                         <li>
-                            <a  class="navbar-link" data-nav-link asp-action="Index" asp-controller="Home">home</a>
+                            <a  class="navbar-link" data-nav-link asp-action="Index" asp-controller="Home">Home</a>
                         </li>
 
                         <li>
-                            <a href="#package" class="navbar-link" data-nav-link>My Packages</a>
+                            <a  class="navbar-link" data-nav-link asp-action="Dashboard" asp-controller="User">My Bookings</a>
                         </li>
 
                         <li>
-                            <a href="#gallery" class="navbar-link" data-nav-link>Review and Rating</a>
+                            <a  class="navbar-link" data-nav-link asp-action="ReviewPage" asp-controller="User">Review and Rating</a>
                         </li>
 
                         <li>
@@ -166,7 +166,13 @@
         </main>
     </div>
 
-    
+    <!--
+      - #GO TO TOP
+    -->
+
+    <a href="#top" class="go-top" data-go-top>
+        <ion-icon name="chevron-up-outline"></ion-icon>
+    </a>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>

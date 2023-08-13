@@ -116,6 +116,7 @@ namespace Tour_FP.Controllers
         {
 
             IEnumerable<CustomerDetail> data = _Customercontext.Customer;
+
             return View(data);
         }
 

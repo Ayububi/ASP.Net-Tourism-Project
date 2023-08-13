@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Tour_FP.Models.Domain.CommunityPostTable>
+@{
+    ViewData["Title"] = "Posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top:200px;">
+    <h1>Posts</h1>
+
+    @foreach (var item in Model)
+    {
+        <div>
+            <h4>@item.UserName</h4>
+            <h3>@item.Title</h3>
+            <p>@item.Content</p>
+            <p>@item.CreatedAt</p>
+            <img style="width:auto; height:auto; max-height:200px; max-width:200px; " src="/Uploads/@item.Images" />
+
+            <div>
+                <h4>Comments</h4>
+                @foreach (var comment in item.Comments)
+                {
+                    <div>
+                        <p>comment sections</p>
+                        <p>@comment.Content</p>
+                        <p>@comment.UserName - @comment.CreatedAt</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Add comment form -->
+            <form method="post" action="@Url.Action("AddComment", "Fourm")">
+                @Html.Hidden("postId", item.PostId)
+                <div>
+                    <label for="commentContent">Add a comment:</label>
+                    <textarea name="commentContent" required></textarea>
+                </div>
+                <div>
+                    <button type="submit">Submit Comment</button>
+                </div>
+            </form>
+           
+        </div>
+    }
+</div>

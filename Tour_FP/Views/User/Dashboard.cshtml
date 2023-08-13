@@ -5,7 +5,7 @@
 }
 
 <div class="container mt-4">
-    <h2>User Dashboard</h2>
+    <h2>MY BOOKINGS</h2>
 
     @if (Model.CustomerInfo.Count > 0)
     {
@@ -13,14 +13,15 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>Destination ID</th>
+                        
                         <th>Destination Name</th>
                         <th>Location</th>
+                        <th>Price</th>
                         <th>Number of Adults</th>
                         <th>Number of Children</th>
                         <th>Preferred Start Date</th>
                         <th>Preferred End Date</th>
-                        <th>Special Requests</th>
+                        <th>Payment Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,14 +31,16 @@
                         if (destinationInfo != null)
                         {
                             <tr>
-                                <td>@customerInfo.DestinationId</td>
+                               
                                 <td>@destinationInfo.CountryName</td>
                                 <td>@destinationInfo.Location</td>
+                                <td>@destinationInfo.Price</td>
                                 <td>@customerInfo.NumberOfAdults</td>
                                 <td>@customerInfo.NumberOfChildren</td>
                                 <td>@customerInfo.PreferredStartDate.ToShortDateString()</td>
                                 <td>@customerInfo.PreferredEndDate.ToShortDateString()</td>
-                                <td>@customerInfo.SpecialRequests</td>
+                                <td>@customerInfo.Status</td>
+                               
                             </tr>
                         }
                     }
@@ -47,6 +50,6 @@
     }
     else
     {
-        <p>No destinations selected.</p>
+        <p>No Destinations Booked yet.</p>
     }
 </div>

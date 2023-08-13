@@ -56,12 +56,56 @@ namespace Tour_FP.Controllers
         }
 
 
-        public IActionResult Index()
+   
+        public async Task< IActionResult> ReviewPage()
         {
-            var data = this._adminService.List();
-            return View(data);
-        }
-      
+            // Get the current logged-in user
+            var user = await _userManager.GetUserAsync(User);
 
-    }
+            // Retrieve the CustomerDetail records for the logged-in user
+            var userCustomerDetails = _dbContext.Customer
+                .Where(cd => cd.UserId == user.Id)
+                .ToList();
+
+            // Get the DestinationIds associated with the logged-in user
+            var destinationIds = userCustomerDetails.Select(cd => cd.DestinationId).ToList();
+
+            // Retrieve the Admin_Dashboard records for the DestinationIds
+            var adminDashboardsForUserDestinations = _dbContext.Admin
+                .Where(ad => destinationIds.Contains(ad.DestinationId))
+                .ToList();
+
+            // Create the view model by combining CustomerDetail and Admin_Dashboard data
+            var viewModel = new CustomerDashboardViewModel
+            {
+                CustomerInfo = userCustomerDetails,
+                DestinationInfo = adminDashboardsForUserDestinations
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReviewPage(ReviewTable model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Get the current logged-in user
+                var user = await _userManager.GetUserAsync(User);
+
+                // Set the UserId for the review
+                model.UserId = user.Id;
+                model.UserName = user.UserName;
+                // Add the review to the database
+                _dbContext.ReviewTable.Add(model);
+                await _dbContext.SaveChangesAsync();
+
+                // Redirect to the Dashboard page or any other appropriate page
+                return RedirectToAction("Dashboard");
+            }
+
+            // If the model state is not valid, redisplay the review submission form with validation errors
+            return View(model);
+        }
+        }
 }
