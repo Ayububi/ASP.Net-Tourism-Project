@@ -119,6 +119,13 @@ namespace Tour_FP.Controllers
 
             return View(data);
         }
+                public IActionResult Booking_Details_testing()
+        {
+
+            IEnumerable<CustomerDetail> data = _Customercontext.Customer;
+
+            return View(data);
+        }
 
     }
 }
