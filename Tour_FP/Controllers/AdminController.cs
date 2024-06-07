@@ -126,13 +126,7 @@ namespace Tour_FP.Controllers
 
             return View(data);
         }
-                     public IActionResult Booking_Details_staging_git_test()
-        {
 
-            IEnumerable<CustomerDetail> data = _Customercontext.Customer;
-
-            return View(data);
-        }
 
     }
 }
